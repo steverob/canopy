@@ -1,0 +1,6 @@
+%li= link_to '@joinEvergreen', "http://twitter.com/joinEvergreen"
+%li= link_to 'github', "https://github.com/Evergreen/Evergreen"
+%li= link_to t('layouts.header.blog'), "http://blog.Evergreenfoundation.org/"
+%li= link_to t('layouts.application.whats_new'), changelog_url
+%li= link_to(t('layouts.header.code') + " " + pod_version, "#{root_path.chomp('/')}/source.tar.gz", {:title => t('layouts.application.source_package')}) unless request.url.match(/joinEvergreen.com/)
+%li= link_to(t('layouts.application.toggle'), toggle_mobile_path)

@@ -1,0 +1,44 @@
+-#   Copyright (c) 2010-2011, Evergreen Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+
+- content_for :page_title do
+  = t('.edit_profile')
+
+= form_tag profile_path, :method => :put, :multipart => true, :id => 'update_profile_form' do
+  = render 'profiles/edit_public', :profile => profile, :aspect => aspect, :person => person
+
+  %br
+
+
+  %h4
+    = t('profiles.edit.your_bio')
+  = text_area_tag 'profile[bio]', profile.bio, :rows => 5, :placeholder => "Bio"
+
+  %br
+
+  %h4
+    = t('profiles.edit.your_location')
+  = text_field_tag 'profile[location]', profile.location, :placeholder => "Location"
+
+
+  %br
+
+  %h4
+    = t('profiles.edit.your_gender')
+  = text_field_tag 'profile[gender]', profile.gender, :placeholder => "Male/Female"
+
+  %br
+
+  %h4
+    = t('profiles.edit.your_birthday')
+  = select_date profile.birthday, :prompt => true,
+    :default => true, :order => t('date.order'), :start_year => 2000, :end_year => 1930, :prefix => 'profile[date]'
+
+  %br
+  %br
+
+
+
+  .submit_block
+    =yield(:submit_block)

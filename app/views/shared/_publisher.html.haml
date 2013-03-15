@@ -1,0 +1,68 @@
+-#   Copyright (c) 2010-2011, Evergreen Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+
+-if publisher_explain
+  :javascript
+    $(document).ready(function() {
+        if( app.publisher ) app.publisher.triggerGettingStarted();
+      });
+
+#publisher{:class => ((aspect == :profile || publisher_open) ? "mention_popup" : "closed")}
+  .content_creation
+    = form_for(StatusMessage.new) do |status|
+      = status.error_messages
+      %div
+        %params
+          #fileInfo
+          #publisher_textarea_wrapper
+            = link_to( image_tag('deletelabel.png'), "#", :id => "hide_publisher", :title => t('.discard_post'))
+            %ul#photodropzone
+            = status.text_area :fake_text, :rows => 2, :value => h(publisher_formatted_text), :tabindex => 1, :placeholder => "#{t('contacts.index.start_a_conversation')}..."
+            = status.hidden_field :text, :value => h(publisher_hidden_text), :class => 'clear_on_submit'
+
+            #file-upload{:title => t('.upload_photos')}
+              = image_tag 'icons/camera.png', :alt => t('.upload_photos').titleize
+
+      - if publisher_public
+        = hidden_field_tag 'aspect_ids[]', "public"
+      - elsif all_aspects_selected?(selected_aspects)
+        = hidden_field_tag 'aspect_ids[]', "all_aspects"
+      - else
+        - for aspect_id in aspect_ids
+          = hidden_field_tag 'aspect_ids[]', aspect_id.to_s
+
+      .options_and_submit
+        .public_toggle
+
+          .dropdown{:class => "hang_right"}
+            .button.toggle.publisher
+              - if publisher_public
+                = t('public')
+              - elsif all_aspects_selected?(selected_aspects)
+                = "All Groves"
+              - elsif selected_aspects.size == 1
+                = selected_aspects.first.name
+              - else
+                = "#{selected_aspects.size} groves"
+              &#9660;
+
+            .wrapper
+              %ul.dropdown_list{:unSelectable => 'on', 'data-person_id' => (person.id if defined?(person) && person), 'data-service_uid' => (service_uid if defined?(service_uid))}
+                %li.public.radio{"data-aspect_id" => "public", :class => ("selected" if publisher_public)}
+                  = t('public')
+
+                %li.divider.all_aspects.radio{:style => "padding-bottom: 5px; border-bottom: 1px solid #ddd;", "data-aspect_id" => "all_aspects", :class => ("selected" if (!publisher_public && all_aspects_selected?(selected_aspects)))}
+                  = "All Groves"
+
+                - for aspect in all_aspects
+                  = aspect_dropdown_list_item(aspect, !all_aspects_selected?(selected_aspects) && selected_aspects.include?(aspect) )
+
+          = status.submit t('.share'), :disabled => publisher_hidden_text.blank?, :class => 'button creation', :tabindex => 2
+
+
+    = link_to '', contacts_path(:aspect_ids => aspect_ids), :class => 'selected_contacts_link hidden'
+
+
+    #publisher_photo_upload
+      = render 'photos/new_photo', :aspect_ids => aspect_ids.join(',')

@@ -1,0 +1,62 @@
+<div class="container" style="position:relative;">
+
+  <span class="header-nav">
+    <span>
+        <a href="/stream">
+          EVERGREEN / {{t "pod_name"}}       </a>
+    </span>
+
+  </span>
+
+  <div id="nav_badges">
+
+
+    <div class="badge badge-inverse" id="message_inbox_badge">
+      <a href="/conversations" title="{{t "header.messages"}}">
+        <img alt="{{t "header.messages"}}" src="{{imageUrl "icons/mail_grey.png"}}" />
+        <div class="badge_count {{#unless current_user.unread_messages_count}} hidden {{/unless}}">
+          {{current_user.unread_messages_count}}
+        </div>
+      </a>
+    </div>
+
+
+  </div>
+
+
+
+  <ul class="dropdown" id="user_menu">
+    <li>
+    <div class="right">
+      ▼
+    </div>
+    <img alt="{{current_user.name}}" class="avatar" src="{{current_user.avatar.small}}" title="{{current_user.name}}" />
+    <a href="#">{{current_user.name}}</a>
+    </li>
+    <li><a href="/people/{{current_user.guid}}">{{t "header.profile"}}</a></li>
+    <li><a href="/contacts">{{t "header.contacts"}}</a></li>
+    <li><a href="/user/edit">{{t "header.settings"}}</a></li>
+    {{#if current_user.admin}}
+      <li><a href="/admins/user_search">{{t "header.admin"}}</a></li>
+    {{/if}}
+    <li><a href="/users/sign_out">{{t "header.log_out"}}</a></li>
+  </ul>
+
+
+  <div id="global_search">
+    <form accept-charset="UTF-8" action="/people" class="search_form" method="get">
+      <input name="utf8" type="hidden" value="✓">
+      <input id="q" name="q" placeholder="{{t "header.search"}}" results="5" type="search" autocomplete="off" class="input-medium search-query">
+    </form>
+  </div>
+
+  <div id="lightbox">
+    <div id="lightbox-content">
+      <a href="#" id="lightbox-close-link">[x] {{t "header.close"}}</a>
+      <img id="lightbox-image">
+      <div id="lightbox-imageset"></div>
+    </div>
+  </div>
+  <div id="lightbox-backdrop"></div>
+
+</div>
